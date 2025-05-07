@@ -1,6 +1,7 @@
 // lib/views/welcome/welcome_load.dart
 import 'package:flutter/material.dart';
 import '../auth/signup_screen.dart';
+import 'package:away_app_v1/widgets/bottom_nav_scaffold.dart';
 
 class AuthPage extends StatelessWidget {
   const AuthPage({super.key});
@@ -37,7 +38,12 @@ class AuthPage extends StatelessWidget {
             const SizedBox(height: 40),
             ElevatedButton(
               onPressed: () {
-                // handle login
+                // TODO handle login
+                // temp button override to test
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (_) => const BottomNavScaffold()),
+                );
               },
               child: const Text('Log in'),
             ),
