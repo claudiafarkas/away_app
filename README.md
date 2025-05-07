@@ -6,20 +6,20 @@
 
 ## 📱 Features
 
-- 🌍 **Interactive Map**  
+- **Interactive Map**  
   Automatically pins new destinations based on parsed video metadata (captions, audio, etc.).
 
-- 🎞 **Video-to-Location Parser**  
+- **Video-to-Location Parser**  
   Uses NLP to extract place names from video captions or audio and geocodes them using the Google Maps API.
 
-- 🔐 **Authentication**  
+- **Authentication**  
   Includes email/password sign-in and plans for Google/Apple login.
 
 - 🗂 **User Tabs**  
   Navigate seamlessly across:  
   `Home`, `Import`, `Map`, `Chat`, and `Profile`.
 
-- 🧠 **ML/NLP Parsing Stack**  
+- **ML/NLP Parsing Stack**  
   Built using `spaCy`, `instaloader`, and optional `transformer` models for robust place-name detection.
 
 ---
@@ -41,14 +41,14 @@
 ## 📐 Figma Design
 
 Explore the UI prototype:  
-👉 [Figma: Away App](https://www.figma.com/design/n4urGzItW82zaoFxVd1GtF/Away.?node-id=0-1&p=f&t=PyaJDIrSvO5xF4cs-0)
+[Figma: Away App](https://www.figma.com/design/n4urGzItW82zaoFxVd1GtF/Away.?node-id=0-1&p=f&t=PyaJDIrSvO5xF4cs-0)
 
 ---
 
 ## 📊 Pitch Deck
 
 Learn more about the product vision and market opportunity:  
-👉 [Canva Pitch Deck](https://www.canva.com/design/DAGmmKYGHks/tdF4P7moTcYmGu08TMqHOw/edit?utm_content=DAGmmKYGHks&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)
+[Canva Pitch Deck](https://www.canva.com/design/DAGmmKYGHks/tdF4P7moTcYmGu08TMqHOw/edit?utm_content=DAGmmKYGHks&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)
 
 ---
 
