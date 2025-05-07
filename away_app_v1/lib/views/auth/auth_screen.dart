@@ -1,0 +1,60 @@
+// lib/views/welcome/welcome_load.dart
+import 'package:flutter/material.dart';
+import '../auth/signup_screen.dart';
+
+class AuthPage extends StatelessWidget {
+  const AuthPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Color.fromARGB(255, 249, 248, 240),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 24),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Text(
+              'Away.',
+              style: TextStyle(
+                fontSize: 52,
+                fontWeight: FontWeight.bold,
+                color: Color(0xFF062D40),
+                fontFamily: 'Times New Roman',
+              ),
+            ),
+            const SizedBox(height: 40), // spacing before form
+            // Login form
+            const TextField(decoration: InputDecoration(labelText: 'Email')),
+            const SizedBox(height: 12),
+            const TextField(
+              obscureText: true,
+              decoration: InputDecoration(labelText: 'Password'),
+            ),
+            const SizedBox(height: 24),
+
+            const Text("- or login with -"),
+            const SizedBox(height: 40),
+            ElevatedButton(
+              onPressed: () {
+                // handle login
+              },
+              child: const Text('Log in'),
+            ),
+            const SizedBox(height: 16),
+
+            TextButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const SignUpPage()),
+                );
+              },
+              child: const Text("Don’t have an account? Sign up here"),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
