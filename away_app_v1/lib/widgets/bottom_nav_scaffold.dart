@@ -18,7 +18,7 @@ class _BottomNavScaffoldState extends State<BottomNavScaffold> {
   late int _currentIndex;
 
   final List<Widget> _pages = const [
-    HomeScreen(),
+    MyHomeScreen(),
     ImportScreen(),
     MapScreen(),
     ChatScreen(),

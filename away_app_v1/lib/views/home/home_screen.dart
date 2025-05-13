@@ -1,17 +1,43 @@
 import 'package:flutter/material.dart';
-// import 'lib/widgets/bottom_nav_scaffold.dart';
+import 'imported_tab_screen.dart';
+import 'feed_tab_screen.dart';
 
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+class MyHomeScreen extends StatefulWidget {
+  const MyHomeScreen({super.key});
+
+  @override
+  State<MyHomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<MyHomeScreen>
+    with SingleTickerProviderStateMixin {
+  late TabController _tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 2, vsync: this);
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(
-        child: Text(
-          'Home Screen',
-          style: TextStyle(color: Color.fromARGB(255, 244, 241, 219)),
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Away'),
+        bottom: TabBar(
+          controller: _tabController,
+          tabs: const [Tab(text: 'Feed'), Tab(text: 'My Imports')],
         ),
+      ),
+      body: TabBarView(
+        controller: _tabController,
+        children: const [MyFeedTab(), MyImportsTab()],
       ),
     );
   }
