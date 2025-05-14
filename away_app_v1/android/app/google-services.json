@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "975056194033",
+    "project_id": "away-6daf3",
+    "storage_bucket": "away-6daf3.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:975056194033:android:23079be898a3f50f30dc50",
+        "android_client_info": {
+          "package_name": "com.example.away_app_v1"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBnXaT48KD3HsVIlVZzdasK_bA6Oi7eVAU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
