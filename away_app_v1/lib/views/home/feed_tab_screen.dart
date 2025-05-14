@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class MyFeedTab extends StatelessWidget {
-  const MyFeedTab({super.key});
+  MyFeedTab({super.key});
 
   @override
   Widget build(BuildContext context) {

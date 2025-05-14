@@ -37,7 +37,7 @@ class _HomeScreenState extends State<MyHomeScreen>
       ),
       body: TabBarView(
         controller: _tabController,
-        children: const [MyFeedTab(), MyImportsTab()],
+        children: [MyFeedTab(), MyImportsTabScreen()],
       ),
     );
   }

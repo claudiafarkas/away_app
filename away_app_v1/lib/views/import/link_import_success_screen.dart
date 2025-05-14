@@ -69,12 +69,12 @@ class ImportSuccessScreen extends StatelessWidget {
                   onPressed:
                       () =>
                           Navigator.pushNamed(context, '/imported_tab_screen'),
-                  child: const Text("Go to Saved Video"),
+                  child: const Text("Check Out Imported Videos!"),
                 ),
                 const SizedBox(width: 10),
                 ElevatedButton(
                   onPressed: () => Navigator.pushNamed(context, '/map_screen'),
-                  child: const Text("View on Map"),
+                  child: const Text("View on Map!"),
                 ),
               ],
             ),

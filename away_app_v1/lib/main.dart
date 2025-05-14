@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: const Color.fromARGB(255, 6, 29, 41),
       ),
       home: const WelcomeLoad(),
-      routes: {'/imported_tab_screen': (context) => const MyImportsTab()},
+      routes: {'/imported_tab_screen': (context) => MyImportsTabScreen()},
     );
   }
 }
