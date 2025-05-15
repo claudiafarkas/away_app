@@ -1,2 +1,42 @@
 away_app_v1/lib/firebase_options.dart
 away_app_v1/macos/Runner/GoogleService-Info.plist
+# iOS/macOS Xcode stuff
+*.xcworkspace
+*.xcuserdata
+*.xcconfig
+*.pbxuser
+*.mode1v3
+*.mode2v3
+*.perspectivev3
+DerivedData/
+Flutter-Debug.xcconfig
+Flutter-Release.xcconfig
+*.xcsettings
+
+# Generated plugin/engine files
+generated_plugin_registrant.*
+generated_plugins.*
+
+# Flutter & Dart
+build/
+.dart_tool/
+.flutter-plugins
+.firebase/
+.idea/
+*.iml
+*.xcworkspace/
+*.xcuserdata/
+.packages
+
+# macOS/iOS/Xcode
+Pods/
+DerivedData/
+*.xcworkspace
+*.xcuserdata/
+ios/Flutter/Flutter.podspec
+
+# System
+.DS_Store
+
+# Lockfiles (optional for Pod)
+Podfile.lock
