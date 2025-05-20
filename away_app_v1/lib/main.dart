@@ -3,14 +3,8 @@ import 'views/welcome_load/welcome_load_screen.dart';
 import 'views/home/imported_tab_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
+import 'views/map/map_screen.dart';
 
-// void main() async {
-//   WidgetsFlutterBinding.ensureInitialized();
-//   if (Firebase.apps.isEmpty) {
-//     await Firebase.initializeApp(
-//       options: DefaultFirebaseOptions.currentPlatform,
-//     );
-//   }
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -46,7 +40,10 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: const Color.fromARGB(255, 6, 29, 41),
       ),
       home: const WelcomeLoad(),
-      routes: {'/imported_tab_screen': (context) => MyImportsTabScreen()},
+      routes: {
+        '/imported_tab_screen': (context) => MyImportsTabScreen(),
+        '/map': (context) => const MapScreen(),
+      },
     );
   }
 }

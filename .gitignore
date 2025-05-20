@@ -1,5 +1,5 @@
 away_app_v1/lib/firebase_options.dart
-away_app_v1/macos/Runner/GoogleService-Info.plist
+
 # iOS/macOS Xcode stuff
 *.xcworkspace
 *.xcuserdata
@@ -12,6 +12,7 @@ DerivedData/
 Flutter-Debug.xcconfig
 Flutter-Release.xcconfig
 *.xcsettings
+firebase_options.dart
 
 # Generated plugin/engine files
 generated_plugin_registrant.*
