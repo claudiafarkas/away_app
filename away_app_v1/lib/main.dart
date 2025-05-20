@@ -4,19 +4,31 @@ import 'views/home/imported_tab_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
-// void main() => runApp(const MyApp());
-// import 'package:firebase_core/firebase_core.dart';
-// import 'firebase_options.dart';
-
-// // ...
-
-// await Firebase.initializeApp(
-//     options: DefaultFirebaseOptions.currentPlatform,
-// );
-
-void main() async {
+// void main() async {
+//   WidgetsFlutterBinding.ensureInitialized();
+//   if (Firebase.apps.isEmpty) {
+//     await Firebase.initializeApp(
+//       options: DefaultFirebaseOptions.currentPlatform,
+//     );
+//   }
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
+  // Try to initialize, but ignore the "duplicate-app" error
+  try {
+    if (Firebase.apps.isEmpty) {
+      await Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform,
+      );
+      print("Firebase initialized");
+    }
+  } on FirebaseException catch (e) {
+    if (e.code == 'duplicate-app') {
+      print("Firebase already initialized, skipping");
+    } else {
+      rethrow; // any other error should still crash
+    }
+  }
   runApp(const MyApp());
 }
 

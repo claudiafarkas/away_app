@@ -53,7 +53,7 @@ class ImportSuccessScreen extends StatelessWidget {
                   ],
                 ),
               );
-            }).toList(),
+            }),
 
             const SizedBox(height: 20),
             const Text(

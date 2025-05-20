@@ -150,7 +150,7 @@ class _MyImportsTabScreenState extends State<MyImportsTabScreen> {
                   const SizedBox(height: 32),
                 ],
               );
-            }).toList(),
+            }),
           ],
         ),
       ),
