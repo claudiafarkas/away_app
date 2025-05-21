@@ -8,7 +8,7 @@ import 'views/map/map_screen.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Try to initialize, but ignore the "duplicate-app" error
+  // ignore the "duplicate-app" error
   try {
     if (Firebase.apps.isEmpty) {
       await Firebase.initializeApp(
@@ -20,7 +20,7 @@ Future<void> main() async {
     if (e.code == 'duplicate-app') {
       print("Firebase already initialized, skipping");
     } else {
-      rethrow; // any other error should still crash
+      rethrow; // rethrow if it's not a duplicate-app error
     }
   }
   runApp(const MyApp());
