@@ -1,6 +1,9 @@
 // ABOUT: Page to confirm import, shows parsed info of video: caption and locatino
 // link to imported saved page and link to map view
 import 'package:flutter/material.dart';
+import '/views/map/map_screen.dart';
+import 'package:away_app_v1/services/api_service.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class ImportSuccessScreen extends StatelessWidget {
   final String caption;
@@ -14,69 +17,46 @@ class ImportSuccessScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final args =
+        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+    final caption = args['caption'] as String;
+    final locations = args['locations'] as List;
+
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(title: const Text('Import Success')),
+      appBar: AppBar(title: Text("🎈Import Success")),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              '📀 Video Imported!',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 20),
-
-            const Text(
-              '💬 Caption:',
+            Text("💬 Caption:", style: TextStyle(fontWeight: FontWeight.bold)),
+            Text(caption),
+            SizedBox(height: 20),
+            Text(
+              "📍 Locations:",
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
-            Text(caption.isNotEmpty ? caption : 'No caption provided'),
-            const SizedBox(height: 20),
-
-            const Text(
-              '📍 Locations Found:',
-              style: TextStyle(fontWeight: FontWeight.bold),
+            Expanded(
+              child: ListView(
+                children:
+                    locations.map((loc) {
+                      final lat = loc['lat'], lng = loc['lng'];
+                      return ListTile(
+                        title: Text(loc['name']),
+                        subtitle: Text(loc['address']),
+                        trailing: Text("[$lat, $lng]"),
+                      );
+                    }).toList(),
+              ),
             ),
-            ...locations.entries.map((entry) {
-              final locName = entry.key;
-              final data = entry.value;
-              return ListTile(
-                title: Text(locName),
-                subtitle: Text(data['address'] ?? 'No address available'),
-                trailing: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Text('Lat: ${data['latitude'] ?? '–'}'),
-                    Text('Lng: ${data['longitude'] ?? '–'}'),
-                  ],
-                ),
-              );
-            }),
-
-            const SizedBox(height: 20),
-            const Text(
-              '🎞 Video:',
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-            const Placeholder(fallbackHeight: 150),
-
-            const SizedBox(height: 20),
-            Row(
-              children: [
-                ElevatedButton(
-                  onPressed:
-                      () =>
-                          Navigator.pushNamed(context, '/imported_tab_screen'),
-                  child: const Text("Check Out Imported Videos!"),
-                ),
-                const SizedBox(width: 10),
-                ElevatedButton(
-                  onPressed: () => Navigator.pushNamed(context, '/map_screen'),
-                  child: const Text("View on Map!"),
-                ),
-              ],
+            ElevatedButton(
+              onPressed:
+                  () => Navigator.pushNamed(
+                    context,
+                    '/map',
+                    arguments: locations,
+                  ),
+              child: Text("View on Map"),
             ),
           ],
         ),

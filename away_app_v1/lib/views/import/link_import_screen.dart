@@ -1,6 +1,7 @@
 // ABOUT: Page prompt to paste video link to parse
 import 'package:flutter/material.dart';
-import 'link_import_success_screen.dart';
+import '../import/link_import_success_screen.dart';
+import 'package:away_app_v1/services/api_service.dart';
 
 class ImportLinkScreen extends StatefulWidget {
   const ImportLinkScreen({super.key});
@@ -12,44 +13,42 @@ class ImportLinkScreen extends StatefulWidget {
 class _ImportLinkScreenState extends State<ImportLinkScreen> {
   final TextEditingController _urlController = TextEditingController();
   bool _isLoading = false;
+  final ApiService _apiService = ApiService();
 
   Future<void> _handleImport() async {
     final url = _urlController.text.trim();
 
     if (url.isEmpty) return;
 
-    setState(() => _isLoading = false);
-
-    //TODO: Replace with API call here
-    await Future.delayed(const Duration(seconds: 2));
-
-    final String fakeCaption = "Exploring Island... ";
-    final Map<String, Map<String, dynamic>> fakeLocations = {
-      "mentawai islands": {
-        "address": "Mentawai Islands Regency, Indonesia",
-        "latitude": -2.133,
-        "longitude": 99.733,
-      },
-    };
-
     setState(() => _isLoading = true);
 
-    final caption = "Exploring Island...";
-    final locations = {
-      "mentawai islands": {
-        "address": "Mentawai Islands Regency, Indonesia",
-        "latitude": -2.133,
-        "longitude": 99.733,
-      },
-    };
-
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder:
-            (_) => ImportSuccessScreen(caption: caption, locations: locations),
-      ),
-    );
+    try {
+      final result = await _apiService.parseInstagramUrl(url);
+      final caption = result['caption'] as String;
+      final locList = result['locations'] as List<dynamic>;
+      final locations = {
+        for (var loc in locList)
+          loc['name'] as String: {
+            'address': loc['address'],
+            'latitude': loc['lat'],
+            'longitude': loc['lng'],
+          },
+      };
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder:
+              (_) =>
+                  ImportSuccessScreen(caption: caption, locations: locations),
+        ),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Import failed: $e')));
+    } finally {
+      setState(() => _isLoading = false);
+    }
   }
 
   @override
@@ -75,7 +74,14 @@ class _ImportLinkScreenState extends State<ImportLinkScreen> {
               onPressed: _isLoading ? null : _handleImport,
               child:
                   _isLoading
-                      ? const CircularProgressIndicator()
+                      ? const SizedBox(
+                        width: 16,
+                        height: 16,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          color: Colors.white,
+                        ),
+                      )
                       : const Text("Import"),
             ),
           ],
