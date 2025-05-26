@@ -21,19 +21,27 @@ class _ImportLinkScreenState extends State<ImportLinkScreen> {
     if (url.isEmpty) return;
 
     setState(() => _isLoading = true);
+    debugPrint("🔗 Importing URL: $url");
 
     try {
       final result = await _apiService.parseInstagramUrl(url);
+      debugPrint("✅ API result: $result");
+
       final caption = result['caption'] as String;
       final locList = result['locations'] as List<dynamic>;
-      final locations = {
-        for (var loc in locList)
-          loc['name'] as String: {
-            'address': loc['address'],
-            'latitude': loc['lat'],
-            'longitude': loc['lng'],
-          },
-      };
+      debugPrint("📍 Parsed locations list: $locList");
+
+      final locations =
+          locList.map((loc) {
+            return {
+              'name': loc['name'],
+              'address': loc['address'],
+              'latitude': loc['lat'],
+              'longitude': loc['lng'],
+            };
+          }).toList();
+      debugPrint("📌 Mapped to screen format: $locations");
+
       Navigator.push(
         context,
         MaterialPageRoute(
@@ -43,9 +51,10 @@ class _ImportLinkScreenState extends State<ImportLinkScreen> {
         ),
       );
     } catch (e) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('Import failed: $e')));
+      debugPrint("❗ Import error: $e\n");
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Import failed in link_import_screen!: $e')),
+      );
     } finally {
       setState(() => _isLoading = false);
     }
