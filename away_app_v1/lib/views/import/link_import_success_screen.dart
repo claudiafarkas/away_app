@@ -1,6 +1,7 @@
 // ABOUT: Page to confirm import, shows parsed info of video: caption and locatino
 // link to imported saved page and link to map view
 import 'package:flutter/material.dart';
+import 'package:away_app_v1/services/import_service.dart';
 
 class ImportSuccessScreen extends StatefulWidget {
   final String caption;
@@ -91,7 +92,7 @@ class _ImportSuccessScreenState extends State<ImportSuccessScreen> {
               ),
               ElevatedButton(
                 onPressed: () {
-                  // Filter selected locations
+                  // Filter selected locations into List<Map<String, dynamic>>
                   final selectedLocations =
                       widget.locations
                           .asMap()
@@ -113,12 +114,10 @@ class _ImportSuccessScreenState extends State<ImportSuccessScreen> {
                             };
                           })
                           .toList();
-                  // Navigate to the map screen with selected locations
-                  Navigator.pushNamed(
-                    context,
-                    '/map',
-                    arguments: selectedLocations,
-                  );
+                  // Add these locations to the singleton service
+                  ImportService.instance.addLocations(selectedLocations);
+                  // Navigate to the map screen (no arguments needed)
+                  Navigator.pushNamed(context, '/map');
                 },
                 child: Text("View Selected on Map"),
               ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:away_app_v1/services/import_service.dart';
 
 class MapScreen extends StatefulWidget {
   const MapScreen({super.key});
@@ -183,12 +184,8 @@ class _MapScreenState extends State<MapScreen> {
   // ----------------------------MAP FUNCTIONALITY------------------------------
   @override
   Widget build(BuildContext context) {
-    final raw = ModalRoute.of(context)!.settings.arguments;
-    final locs =
-        (raw is List)
-            ? raw.cast<Map<String, dynamic>>()
-            : <Map<String, dynamic>>[];
-    debugPrint("Locations received: $locs");
+    final locs = ImportService.instance.importedLocations;
+    debugPrint("Locations from ImportService: $locs");
 
     final tempList =
         locs.map((l) {

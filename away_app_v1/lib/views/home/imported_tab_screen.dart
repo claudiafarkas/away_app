@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-
-// TODO: add imported video. filters, sorting, + folder, folder sharing with other users, search bar
+import 'package:away_app_v1/services/import_service.dart';
 
 class MyImportsTabScreen extends StatefulWidget {
   const MyImportsTabScreen({super.key});
@@ -11,18 +10,14 @@ class MyImportsTabScreen extends StatefulWidget {
 }
 
 class _MyImportsTabScreenState extends State<MyImportsTabScreen> {
-  // folder name → list of videos
-  Map<String, List<Map<String, dynamic>>> folders = {
-    "All Videos": [
-      {"caption": "Beach Hike", "thumbnail": Icons.terrain},
-    ],
-    "Island Vibes": [
-      {"caption": "Mentawai Islands", "thumbnail": Icons.landscape},
-    ],
-    "Euro Trip '25": [
-      {"caption": "Paris Getaway", "thumbnail": Icons.location_city},
-    ],
-  };
+  late Map<String, List<Map<String, dynamic>>> folders;
+
+  @override
+  void initState() {
+    super.initState();
+    // All imported items go under "All Locations"
+    folders = {"All Locations": ImportService.instance.importedLocations};
+  }
 
   void _showCreateFolderDialog() {
     final controller = TextEditingController();
@@ -58,13 +53,12 @@ class _MyImportsTabScreenState extends State<MyImportsTabScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("My Videos")),
+      appBar: AppBar(title: const Text("My Imports")),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(12),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Create Folder Button
             Align(
               alignment: Alignment.centerRight,
               child: ElevatedButton.icon(
@@ -75,7 +69,6 @@ class _MyImportsTabScreenState extends State<MyImportsTabScreen> {
             ),
             const SizedBox(height: 16),
 
-            // Folder sections
             ...folders.entries.map((entry) {
               final folderName = entry.key;
               final videos = entry.value;
@@ -83,7 +76,6 @@ class _MyImportsTabScreenState extends State<MyImportsTabScreen> {
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Folder header with delete button
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -95,8 +87,7 @@ class _MyImportsTabScreenState extends State<MyImportsTabScreen> {
                           color: Colors.white,
                         ),
                       ),
-                      if (folderName !=
-                          "All Videos") // Don't allow deleting default folder
+                      if (folderName != "All Locations")
                         IconButton(
                           icon: const Icon(
                             Icons.delete,
@@ -110,10 +101,9 @@ class _MyImportsTabScreenState extends State<MyImportsTabScreen> {
                   ),
                   const SizedBox(height: 8),
 
-                  // Videos grid or placeholder
                   videos.isEmpty
                       ? const Text(
-                        "No videos yet.",
+                        "No items imported yet.",
                         style: TextStyle(color: Colors.white70),
                       )
                       : MasonryGridView.count(
@@ -124,7 +114,8 @@ class _MyImportsTabScreenState extends State<MyImportsTabScreen> {
                         crossAxisSpacing: 8,
                         itemCount: videos.length,
                         itemBuilder: (context, index) {
-                          final video = videos[index];
+                          final item = videos[index];
+                          final name = item['name'] as String? ?? 'Unknown';
                           return Card(
                             color: Colors.white,
                             child: Padding(
@@ -132,10 +123,10 @@ class _MyImportsTabScreenState extends State<MyImportsTabScreen> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Icon(video['thumbnail'], size: 60),
+                                  const Icon(Icons.location_pin, size: 60),
                                   const SizedBox(height: 8),
                                   Text(
-                                    video['caption'],
+                                    name,
                                     style: const TextStyle(
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -150,14 +141,10 @@ class _MyImportsTabScreenState extends State<MyImportsTabScreen> {
                   const SizedBox(height: 32),
                 ],
               );
-            }),
+            }).toList(),
           ],
         ),
       ),
     );
   }
 }
-  // show saved video
-  // search bar
-  // folder creation icon and function
-
