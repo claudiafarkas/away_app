@@ -181,24 +181,66 @@ class _MapScreenState extends State<MapScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final raw = ModalRoute.of(context)!.settings.arguments;
     final locs =
-        ModalRoute.of(context)?.settings.arguments as List<dynamic>? ?? [];
-    final markers =
+        (raw is List)
+            ? raw.cast<Map<String, dynamic>>()
+            : <Map<String, dynamic>>[];
+    debugPrint("Locations received: $locs");
+
+    // final markers =
+    //     locs.map((l) {
+    //       final name = l['name'] ?? 'Unknown';
+    //       final lat = l['lat'] ?? 0.0;
+    //       final lng = l['lng'] ?? 0.0;
+    //       final address = l['address'] ?? 'No address available';
+    // Build a list of markers, skipping any with invalid coordinates
+    final tempList =
         locs.map((l) {
+          final name = l['name'] as String? ?? 'Unknown';
+          final latValue = l['lat'];
+          final lngValue = l['lng'];
+          double lat = 0.0;
+          double lng = 0.0;
+          try {
+            lat =
+                (latValue is double ? latValue : (latValue as num).toDouble());
+            lng =
+                (lngValue is double ? lngValue : (lngValue as num).toDouble());
+          } catch (_) {
+            debugPrint("Skipping marker with non-numeric coordinates: $name");
+            return null;
+          }
+          final address = l['address'] as String? ?? 'No address available';
+
+          debugPrint("Creating marker: $name at ($lat, $lng)");
+          if (lat == 0.0 && lng == 0.0) {
+            debugPrint("Skipping marker with invalid coordinates: $name");
+            return null;
+          }
           return Marker(
-            markerId: MarkerId(l['name']),
-            position: LatLng(l['lat'], l['lng']),
-            infoWindow: InfoWindow(title: l['name'], snippet: l['address']),
+            markerId: MarkerId(name),
+            position: LatLng(lat, lng),
+            infoWindow: InfoWindow(title: name, snippet: address),
           );
-        }).toSet();
+        }).toList();
+    // Filter out any nulls and convert to a Set<Marker>
+    final markers = tempList.where((m) => m != null).cast<Marker>().toSet();
+
+    if (markers.isEmpty) {
+      print('No markers available. Using default center.');
+    }
 
     final center = markers.isNotEmpty ? markers.first.position : _center;
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Map'), elevation: 2),
+      appBar: AppBar(title: const Text('Map')),
       body: GoogleMap(
         onMapCreated: _onMapCreated,
-        initialCameraPosition: CameraPosition(target: _center, zoom: 2),
+        initialCameraPosition: CameraPosition(
+          target: center,
+          zoom: markers.isNotEmpty ? 12 : 2,
+        ),
         markers: markers,
         zoomControlsEnabled: true,
         zoomGesturesEnabled: true,

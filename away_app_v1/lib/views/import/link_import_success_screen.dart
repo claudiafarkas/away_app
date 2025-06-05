@@ -97,9 +97,22 @@ class _ImportSuccessScreenState extends State<ImportSuccessScreen> {
                           .asMap()
                           .entries
                           .where((entry) => _selectedLocations[entry.key])
-                          .map((entry) => entry.value)
+                          .map((entry) {
+                            final loc = entry.value;
+                            return {
+                              'name': loc['name'] as String? ?? 'Unknown',
+                              'address': loc['address'] as String? ?? '',
+                              'lat':
+                                  loc['latitude'] is double
+                                      ? loc['latitude']
+                                      : (loc['latitude'] as num).toDouble(),
+                              'lng':
+                                  loc['longitude'] is double
+                                      ? loc['longitude']
+                                      : (loc['longitude'] as num).toDouble(),
+                            };
+                          })
                           .toList();
-
                   // Navigate to the map screen with selected locations
                   Navigator.pushNamed(
                     context,
