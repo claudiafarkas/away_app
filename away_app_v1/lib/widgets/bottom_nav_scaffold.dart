@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../views/home/home_screen.dart';
 import '../views/import/link_import_screen.dart';
 import '../views/map/map_screen.dart';
-import '../views/chat/chat_screen.dart';
+import '../views/deals/deals_screen.dart';
 import '../views/profile/profile_screen.dart';
 
 class BottomNavScaffold extends StatefulWidget {
@@ -21,7 +21,7 @@ class _BottomNavScaffoldState extends State<BottomNavScaffold> {
     MyHomeScreen(),
     ImportLinkScreen(),
     MapScreen(),
-    ChatScreen(),
+    DealsScreen(),
     ProfileScreen(),
   ];
 
@@ -48,7 +48,7 @@ class _BottomNavScaffoldState extends State<BottomNavScaffold> {
             label: 'Import',
           ),
           BottomNavigationBarItem(icon: Icon(Icons.map), label: 'Map'),
-          BottomNavigationBarItem(icon: Icon(Icons.chat), label: 'Chat'),
+          BottomNavigationBarItem(icon: Icon(Icons.money), label: 'Deals'),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
         ],
       ),

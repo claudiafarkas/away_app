@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
-class ChatScreen extends StatelessWidget {
-  const ChatScreen({super.key});
+class DealsScreen extends StatelessWidget {
+  const DealsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
       body: Center(
         child: Text(
-          'Chat Screen',
+          'Deals/Offers Screen',
           style: TextStyle(color: Color.fromARGB(255, 244, 241, 219)),
         ),
       ),
