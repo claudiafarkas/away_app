@@ -2,6 +2,7 @@
 // link to imported saved page and link to map view
 import 'package:flutter/material.dart';
 import 'package:away_app_v1/services/import_service.dart';
+import 'package:away_app_v1/views/map/map_screen.dart';
 
 class ImportSuccessScreen extends StatefulWidget {
   final String caption;
@@ -117,7 +118,13 @@ class _ImportSuccessScreenState extends State<ImportSuccessScreen> {
                   // Add these locations to the singleton service
                   ImportService.instance.addLocations(selectedLocations);
                   // Navigate to the map screen (no arguments needed)
-                  Navigator.pushNamed(context, '/map');
+                  // Navigator.pushNamed(context, '/map');
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const MapScreen(showDoneButton: true),
+                    ),
+                  );
                 },
                 child: Text("View Selected on Map"),
               ),

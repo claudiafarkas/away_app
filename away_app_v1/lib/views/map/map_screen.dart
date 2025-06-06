@@ -3,7 +3,9 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:away_app_v1/services/import_service.dart';
 
 class MapScreen extends StatefulWidget {
-  const MapScreen({super.key});
+  // const MapScreen({super.key});
+  final bool showDoneButton;
+  const MapScreen({super.key, this.showDoneButton = false});
 
   @override
   State<MapScreen> createState() => _MapScreenState();
@@ -216,7 +218,7 @@ class _MapScreenState extends State<MapScreen> {
             infoWindow: InfoWindow(title: name, snippet: address),
           );
         }).toList();
-    // Filter out any nulls and convert to a Set<Marker>
+    // filter out any nulls and convert to a Set<Marker>
     final markers = tempList.where((m) => m != null).cast<Marker>().toSet();
 
     if (markers.isEmpty) {
@@ -226,7 +228,28 @@ class _MapScreenState extends State<MapScreen> {
     final center = markers.isNotEmpty ? markers.first.position : _center;
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Map')),
+      // appBar: AppBar(title: const Text('Map')),
+      appBar: AppBar(
+        title: const Text('Map'),
+        elevation: 2,
+        backgroundColor: Colors.white,
+        foregroundColor: Colors.black87,
+        actions:
+            widget.showDoneButton
+                ? [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(context); // close MapScreen
+                      Navigator.pop(context); // close ImportSuccessScreen
+                    },
+                    child: const Text(
+                      'Done',
+                      style: TextStyle(color: Color.fromRGBO(6, 45, 64, 1)),
+                    ),
+                  ),
+                ]
+                : null,
+      ),
       body: GoogleMap(
         onMapCreated: _onMapCreated,
         initialCameraPosition: CameraPosition(
