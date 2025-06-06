@@ -51,8 +51,6 @@ class _MyImportsTabScreenState extends State<MyImportsTabScreen> {
     );
   }
 
-  /// Prompts for a folder name and, upon confirmation,
-  /// creates that folder and moves all currently-selected pins into it.
   void _createFolderAndAssign() {
     final controller = TextEditingController();
     showDialog(
@@ -72,7 +70,7 @@ class _MyImportsTabScreenState extends State<MyImportsTabScreen> {
               ElevatedButton(
                 onPressed: () {
                   final name = controller.text.trim();
-                  // Only create if name is non-empty and not already a board
+                  // only create if name is non-empty and not already a board
                   if (name.isNotEmpty && !_boardNames.contains(name)) {
                     final allPins = ImportService.instance.importedLocations;
                     setState(() {
@@ -80,7 +78,7 @@ class _MyImportsTabScreenState extends State<MyImportsTabScreen> {
                       _boardNames.add(name);
                       _customBoards[name] = [];
 
-                      // Move each selected pin from "All Locations" into this board
+                      // move each selected pin from "All Locations" into this board
                       for (var idx in _selectedIndices) {
                         if (idx >= 0 && idx < allPins.length) {
                           _customBoards[name]!.add(allPins[idx]);
@@ -102,7 +100,6 @@ class _MyImportsTabScreenState extends State<MyImportsTabScreen> {
   }
 
   void _addToFolder() {
-    // Build combined folder list to choose from
     final folderNames = _boardNames;
     showDialog(
       context: context,
@@ -113,7 +110,6 @@ class _MyImportsTabScreenState extends State<MyImportsTabScreen> {
               ...folderNames.map((fname) {
                 return SimpleDialogOption(
                   onPressed: () {
-                    // Only add to custom boards, not "All Locations"
                     if (fname != "All Locations" &&
                         _customBoards.containsKey(fname)) {
                       final allPins = ImportService.instance.importedLocations;
@@ -145,7 +141,6 @@ class _MyImportsTabScreenState extends State<MyImportsTabScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // Dynamically merge “All Locations” with any custom boards:
     final Map<String, List<Map<String, dynamic>>> folders = {
       "All Locations": ImportService.instance.importedLocations,
       ..._customBoards,
@@ -155,16 +150,15 @@ class _MyImportsTabScreenState extends State<MyImportsTabScreen> {
     return DefaultTabController(
       length: boardNames.length,
       child: Scaffold(
-        backgroundColor: Colors.white, // 1. Ensure solid white page background
+        backgroundColor: Colors.white,
         appBar: AppBar(
-          backgroundColor: Colors.white, // 2. White AppBar background
+          backgroundColor: Colors.white,
           iconTheme: const IconThemeData(color: Colors.black),
           titleTextStyle: const TextStyle(
             color: Colors.black,
             fontSize: 20,
             fontWeight: FontWeight.w600,
           ),
-          // Remove any default “Away” title; use our own below:
           title: const Text("Your saved imports"),
           actions: [
             TextButton(
@@ -177,7 +171,6 @@ class _MyImportsTabScreenState extends State<MyImportsTabScreen> {
               style: TextButton.styleFrom(foregroundColor: Colors.black),
               child: Text(_isSelectionMode ? "Cancel" : "Select"),
             ),
-            // 3. Plain "+" button in black
             TextButton(
               onPressed: _showCreateFolderDialog,
               style: TextButton.styleFrom(foregroundColor: Colors.black),
@@ -185,7 +178,7 @@ class _MyImportsTabScreenState extends State<MyImportsTabScreen> {
             ),
           ],
           bottom: TabBar(
-            isScrollable: true, // <-- make tabs scrollable
+            isScrollable: true,
             indicatorColor: Colors.black,
             tabs:
                 boardNames.map((name) {

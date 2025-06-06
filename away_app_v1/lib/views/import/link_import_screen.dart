@@ -1,4 +1,5 @@
-// ABOUT: Page prompt to paste video link to parse
+// lib/views/import/link_import_screen.dart
+
 import 'package:flutter/material.dart';
 import '../import/link_import_success_screen.dart';
 import 'package:away_app_v1/services/api_service.dart';
@@ -17,19 +18,13 @@ class _ImportLinkScreenState extends State<ImportLinkScreen> {
 
   Future<void> _handleImport() async {
     final url = _urlController.text.trim();
-
     if (url.isEmpty) return;
 
     setState(() => _isLoading = true);
-    debugPrint("🔗 Importing URL: $url");
-
     try {
       final result = await _apiService.parseInstagramUrl(url);
-      debugPrint("✅ API result: $result");
-
       final caption = result['caption'] as String;
       final locList = result['locations'] as List<dynamic>;
-      debugPrint("📍 Parsed locations list: $locList");
 
       final locations =
           locList.map((loc) {
@@ -40,8 +35,8 @@ class _ImportLinkScreenState extends State<ImportLinkScreen> {
               'longitude': loc['lng'],
             };
           }).toList();
-      debugPrint("📌 Mapped to screen format: $locations");
 
+      if (!mounted) return;
       Navigator.push(
         context,
         MaterialPageRoute(
@@ -51,50 +46,126 @@ class _ImportLinkScreenState extends State<ImportLinkScreen> {
         ),
       );
     } catch (e) {
-      debugPrint("❗ Import error: $e\n");
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Import failed in link_import_screen!: $e')),
-      );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('⚠️ Import failed: $e'),
+            backgroundColor: Colors.redAccent,
+            duration: const Duration(seconds: 3),
+          ),
+        );
+      }
     } finally {
-      setState(() => _isLoading = false);
+      if (mounted) setState(() => _isLoading = false);
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    const accentColor = Color(0xFF062D40);
+
     return Scaffold(
-      appBar: AppBar(title: const Text("Import Video")),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            const Text("Paste your Instagram link:"),
-            const SizedBox(height: 10),
-            TextField(
-              controller: _urlController,
-              style: const TextStyle(color: Colors.white),
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                hintText: "https://www.instagram.com/...",
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        centerTitle: true,
+        title: const Text(
+          'Import Video',
+          style: TextStyle(
+            color: Colors.black87,
+            fontSize: 20,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        iconTheme: const IconThemeData(color: Colors.black54),
+      ),
+      body: Stack(
+        children: [
+          SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                const Text(
+                  'Paste your Instagram link below',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.black87,
+                  ),
+                ),
+                const SizedBox(height: 16),
+                // URL Input Field
+                Material(
+                  elevation: 1,
+                  borderRadius: BorderRadius.circular(12),
+                  child: TextField(
+                    controller: _urlController,
+                    style: const TextStyle(color: Colors.black87),
+                    decoration: InputDecoration(
+                      hintText: "https://www.instagram.com/...",
+                      hintStyle: TextStyle(color: Colors.grey[400]),
+                      filled: true,
+                      fillColor: Colors.white,
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 14,
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide(color: Colors.grey.shade300),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide(color: accentColor, width: 1.5),
+                      ),
+                    ),
+                    keyboardType: TextInputType.url,
+                  ),
+                ),
+                const SizedBox(height: 24),
+                ElevatedButton(
+                  onPressed: _isLoading ? null : _handleImport,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: accentColor,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    padding: const EdgeInsets.symmetric(vertical: 14),
+                    elevation: 2,
+                  ),
+                  child:
+                      _isLoading
+                          ? const SizedBox(
+                            height: 24,
+                            width: 24,
+                            child: CircularProgressIndicator(
+                              color: Colors.white,
+                              strokeWidth: 2.5,
+                            ),
+                          )
+                          : const Text(
+                            'Import',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.white,
+                            ),
+                          ),
+                ),
+              ],
+            ),
+          ),
+          // loading spinner (on top of button area)
+          if (_isLoading)
+            Positioned.fill(
+              child: Container(
+                color: Colors.black.withOpacity(0.1),
+                child: const Center(child: CircularProgressIndicator()),
               ),
             ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: _isLoading ? null : _handleImport,
-              child:
-                  _isLoading
-                      ? const SizedBox(
-                        width: 16,
-                        height: 16,
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2,
-                          color: Colors.white,
-                        ),
-                      )
-                      : const Text("Import"),
-            ),
-          ],
-        ),
+        ],
       ),
     );
   }
