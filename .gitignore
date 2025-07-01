@@ -1,5 +1,8 @@
 away_app_v1/lib/firebase_options.dart
 
+# ignore local .env files everywhere
+**/.env
+
 # iOS/macOS Xcode stuff
 *.xcworkspace
 *.xcuserdata

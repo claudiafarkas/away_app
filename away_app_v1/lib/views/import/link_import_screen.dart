@@ -31,6 +31,8 @@ class _ImportLinkScreenState extends State<ImportLinkScreen> {
             return {
               'name': loc['name'],
               'address': loc['address'],
+              'city': loc['city'],
+              'country': loc['country'],
               'latitude': loc['lat'],
               'longitude': loc['lng'],
             };
